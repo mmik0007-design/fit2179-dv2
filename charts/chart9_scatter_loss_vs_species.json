@@ -1,0 +1,57 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Relationship between relative forest loss intensity and estimated number of threatened species per Malaysian state. Sources: Global Forest Watch 2024; IUCN Red List 2024.",
+  "data": {
+    "values": [
+      {"state": "Sabah",       "forest_loss": 9, "threatened": 185},
+      {"state": "Sarawak",     "forest_loss": 8, "threatened": 162},
+      {"state": "Johor",       "forest_loss": 6, "threatened": 110},
+      {"state": "Pahang",      "forest_loss": 5, "threatened": 98},
+      {"state": "Selangor",    "forest_loss": 5, "threatened": 90},
+      {"state": "Perak",       "forest_loss": 4, "threatened": 82},
+      {"state": "Kelantan",    "forest_loss": 3, "threatened": 55},
+      {"state": "Kedah",       "forest_loss": 3, "threatened": 45},
+      {"state": "Melaka",      "forest_loss": 2, "threatened": 28},
+      {"state": "Pulau Pinang","forest_loss": 1, "threatened": 18}
+    ]
+  },
+  "width": "container",
+  "height": 280,
+  "layer": [
+    {
+      "mark": {"type": "point", "filled": true, "opacity": 0.85, "size": 120},
+      "encoding": {
+        "x": {
+          "field": "forest_loss",
+          "type": "quantitative",
+          "axis": {"title": "Relative Forest Loss Intensity (1–9)"},
+          "scale": {"domain": [0, 10]}
+        },
+        "y": {
+          "field": "threatened",
+          "type": "quantitative",
+          "axis": {"title": "Estimated Threatened Species"}
+        },
+        "color": {
+          "field": "forest_loss",
+          "type": "quantitative",
+          "scale": {"scheme": "reds"},
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "state"},
+          {"field": "forest_loss", "title": "Forest Loss Index"},
+          {"field": "threatened",  "title": "Threatened Species"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "text", "dy": -12, "fontSize": 11, "color": "#1a3a2a"},
+      "encoding": {
+        "x": {"field": "forest_loss", "type": "quantitative"},
+        "y": {"field": "threatened",  "type": "quantitative"},
+        "text": {"field": "state"}
+      }
+    }
+  ]
+}

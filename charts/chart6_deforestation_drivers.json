@@ -1,0 +1,29 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Estimated proportion of deforestation in Malaysia attributed to each driver. Sources: World Resources Institute; Wikipedia - Deforestation in Malaysia.",
+  "data": {
+    "values": [
+      {"driver": "Palm Oil Expansion",  "pct": 47},
+      {"driver": "Logging",             "pct": 25},
+      {"driver": "Subsistence Agri.",   "pct": 10},
+      {"driver": "Urban Expansion",     "pct": 9},
+      {"driver": "Other Agriculture",   "pct": 6},
+      {"driver": "Mining",              "pct": 3}
+    ]
+  },
+  "mark": {"type": "bar", "cornerRadiusEnd": 3},
+  "width": "container",
+  "height": 240,
+  "encoding": {
+    "y": {"field": "driver", "type": "nominal", "sort": "-x", "axis": {"title": null}},
+    "x": {"field": "pct", "type": "quantitative", "axis": {"title": "Estimated % of Deforestation"}},
+    "color": {
+      "condition": {"test": "datum.driver === 'Palm Oil Expansion'", "value": "#c1121f"},
+      "value": "#e76f51"
+    },
+    "tooltip": [
+      {"field": "driver"},
+      {"field": "pct", "title": "Estimated %"}
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Size of major protected areas (national parks, wildlife sanctuaries) in Malaysia by hectares. Source: Department of Wildlife and National Parks Malaysia (PERHILITAN).",
+  "data": {
+    "values": [
+      {"park": "Taman Negara",      "state": "Pahang/Kelantan/Terengganu", "area_ha": 4343000, "type": "National Park"},
+      {"park": "Crocker Range BR",  "state": "Sabah",                      "area_ha": 1399000, "type": "Biosphere Reserve"},
+      {"park": "Maliau Basin CA",   "state": "Sabah",                      "area_ha": 588000,  "type": "Conservation Area"},
+      {"park": "Belum-Temenggor",   "state": "Perak",                      "area_ha": 300000,  "type": "Forest Reserve"},
+      {"park": "Endau-Rompin",      "state": "Johor/Pahang",               "area_ha": 210000,  "type": "National Park"},
+      {"park": "Penang Hill BR",    "state": "Penang",                     "area_ha": 12481,   "type": "Biosphere Reserve"},
+      {"park": "Gunung Mulu NP",    "state": "Sarawak",                    "area_ha": 52900,   "type": "National Park"},
+      {"park": "Bako NP",           "state": "Sarawak",                    "area_ha": 2700,    "type": "National Park"}
+    ]
+  },
+  "mark": {"type": "bar", "cornerRadiusEnd": 3},
+  "width": "container",
+  "height": 280,
+  "encoding": {
+    "y": {"field": "park", "type": "nominal", "sort": "-x", "axis": {"title": null}},
+    "x": {
+      "field": "area_ha",
+      "type": "quantitative",
+      "axis": {"title": "Protected Area (hectares)", "format": ",.0f"}
+    },
+    "color": {
+      "field": "type",
+      "type": "nominal",
+      "scale": {"range": ["#2d6a4f", "#74c69d", "#f4a261", "#40916c"]},
+      "legend": {"title": "Type"}
+    },
+    "tooltip": [
+      {"field": "park"},
+      {"field": "state"},
+      {"field": "area_ha", "title": "Area (ha)", "format": ",.0f"},
+      {"field": "type"}
+    ]
+  }
+}

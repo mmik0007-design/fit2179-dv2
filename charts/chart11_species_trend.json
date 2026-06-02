@@ -1,0 +1,42 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Growth in total threatened animal species in Malaysia from 2000 to 2024. Source: IUCN Red List historical assessments.",
+  "data": {
+    "values": [
+      {"year": 2000, "total": 310}, {"year": 2002, "total": 338},
+      {"year": 2004, "total": 365}, {"year": 2006, "total": 398},
+      {"year": 2008, "total": 432}, {"year": 2010, "total": 465},
+      {"year": 2012, "total": 512}, {"year": 2014, "total": 548},
+      {"year": 2016, "total": 589}, {"year": 2018, "total": 635},
+      {"year": 2020, "total": 688}, {"year": 2022, "total": 730},
+      {"year": 2024, "total": 761}
+    ]
+  },
+  "width": "container",
+  "height": 240,
+  "layer": [
+    {
+      "mark": {"type": "area", "color": "#c1121f", "opacity": 0.15},
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": 0}},
+        "y": {"field": "total", "type": "quantitative", "axis": {"title": "Total Threatened Animal Species"}}
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "color": "#c1121f",
+        "strokeWidth": 2.5,
+        "point": {"color": "#c1121f", "size": 50}
+      },
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "total", "type": "quantitative"},
+        "tooltip": [
+          {"field": "year"},
+          {"field": "total", "title": "Threatened Species"}
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Unit chart showing approximately 1 in 5 assessed species groups in Malaysia are threatened. Source: IUCN Red List 2024.",
+  "data": {
+    "sequence": {"start": 0, "stop": 100, "as": "id"}
+  },
+  "transform": [
+    {"calculate": "datum.id % 10",        "as": "col"},
+    {"calculate": "floor(datum.id / 10)", "as": "row"},
+    {"calculate": "datum.id < 18",        "as": "threatened"}
+  ],
+  "mark": {"type": "square", "size": 110, "opacity": 0.9},
+  "width": "container",
+  "height": 280,
+  "encoding": {
+    "x": {"field": "col", "type": "ordinal", "axis": null},
+    "y": {"field": "row", "type": "ordinal", "axis": null},
+    "color": {
+      "field": "threatened",
+      "type": "nominal",
+      "scale": {
+        "domain": [true, false],
+        "range": ["#c1121f", "#d8f3dc"]
+      },
+      "legend": {
+        "title": "Status",
+        "labelExpr": "datum.value === 'true' ? 'Threatened' : 'Not at risk'"
+      }
+    },
+    "tooltip": [
+      {"field": "threatened", "title": "Threatened", "format": ""}
+    ]
+  }
+}

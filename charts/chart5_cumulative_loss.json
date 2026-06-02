@@ -1,0 +1,31 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Cumulative tree cover loss in Malaysia since 2001 (thousands of hectares). Source: Global Forest Watch 2024.",
+  "data": {
+    "values": [
+      {"year": 2001, "cumulative": 489},  {"year": 2002, "cumulative": 902},
+      {"year": 2003, "cumulative": 1386}, {"year": 2004, "cumulative": 1888},
+      {"year": 2005, "cumulative": 2349}, {"year": 2006, "cumulative": 2852},
+      {"year": 2007, "cumulative": 3338}, {"year": 2008, "cumulative": 3759},
+      {"year": 2009, "cumulative": 4147}, {"year": 2010, "cumulative": 4588},
+      {"year": 2011, "cumulative": 5040}, {"year": 2012, "cumulative": 5518},
+      {"year": 2013, "cumulative": 5981}, {"year": 2014, "cumulative": 6390},
+      {"year": 2015, "cumulative": 6888}, {"year": 2016, "cumulative": 7508},
+      {"year": 2017, "cumulative": 8097}, {"year": 2018, "cumulative": 8518},
+      {"year": 2019, "cumulative": 8905}, {"year": 2020, "cumulative": 9261},
+      {"year": 2021, "cumulative": 9605}, {"year": 2022, "cumulative": 9934},
+      {"year": 2023, "cumulative": 10252}
+    ]
+  },
+  "mark": {"type": "area", "color": "#c1121f", "opacity": 0.7, "line": {"color": "#c1121f"}},
+  "width": "container",
+  "height": 240,
+  "encoding": {
+    "x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": -30}},
+    "y": {"field": "cumulative", "type": "quantitative", "axis": {"title": "Cumulative Loss (000 ha)"}},
+    "tooltip": [
+      {"field": "year"},
+      {"field": "cumulative", "title": "Total Lost (000 ha)"}
+    ]
+  }
+}

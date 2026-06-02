@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Threatened animal species in Malaysia by group and IUCN category (2024). Source: IUCN Red List 2024.",
+  "data": {
+    "values": [
+      {"group": "Fish",       "category": "Critically Endangered", "count": 36},
+      {"group": "Fish",       "category": "Endangered",            "count": 73},
+      {"group": "Fish",       "category": "Vulnerable",            "count": 133},
+      {"group": "Mammals",    "category": "Critically Endangered", "count": 27},
+      {"group": "Mammals",    "category": "Endangered",            "count": 32},
+      {"group": "Mammals",    "category": "Vulnerable",            "count": 22},
+      {"group": "Birds",      "category": "Critically Endangered", "count": 9},
+      {"group": "Birds",      "category": "Endangered",            "count": 26},
+      {"group": "Birds",      "category": "Vulnerable",            "count": 50},
+      {"group": "Reptiles",   "category": "Critically Endangered", "count": 8},
+      {"group": "Reptiles",   "category": "Endangered",            "count": 22},
+      {"group": "Reptiles",   "category": "Vulnerable",            "count": 48},
+      {"group": "Amphibians", "category": "Critically Endangered", "count": 11},
+      {"group": "Amphibians", "category": "Endangered",            "count": 22},
+      {"group": "Amphibians", "category": "Vulnerable",            "count": 62},
+      {"group": "Molluscs",   "category": "Critically Endangered", "count": 6},
+      {"group": "Molluscs",   "category": "Endangered",            "count": 12},
+      {"group": "Molluscs",   "category": "Vulnerable",            "count": 28},
+      {"group": "Insects",    "category": "Critically Endangered", "count": 5},
+      {"group": "Insects",    "category": "Endangered",            "count": 10},
+      {"group": "Insects",    "category": "Vulnerable",            "count": 60}
+    ]
+  },
+  "mark": {"type": "bar", "cornerRadiusTopLeft": 2, "cornerRadiusTopRight": 2},
+  "width": "container",
+  "height": 260,
+  "encoding": {
+    "x": {
+      "field": "group",
+      "type": "nominal",
+      "axis": {"labelAngle": -30, "title": null}
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative",
+      "stack": "zero",
+      "axis": {"title": "Number of Species"}
+    },
+    "color": {
+      "field": "category",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Critically Endangered", "Endangered", "Vulnerable"],
+        "range": ["#c1121f", "#e76f51", "#74c69d"]
+      },
+      "legend": {"title": "Threat Level", "orient": "top"}
+    },
+    "tooltip": [
+      {"field": "group"},
+      {"field": "category"},
+      {"field": "count", "title": "Species"}
+    ]
+  }
+}

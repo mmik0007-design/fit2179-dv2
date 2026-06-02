@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Annual tree cover loss in Malaysia 2001-2023 (thousands of hectares). Source: Global Forest Watch 2024.",
+  "data": {
+    "values": [
+      {"year": 2001, "loss": 489}, {"year": 2002, "loss": 413},
+      {"year": 2003, "loss": 484}, {"year": 2004, "loss": 502},
+      {"year": 2005, "loss": 461}, {"year": 2006, "loss": 503},
+      {"year": 2007, "loss": 486}, {"year": 2008, "loss": 421},
+      {"year": 2009, "loss": 388}, {"year": 2010, "loss": 441},
+      {"year": 2011, "loss": 452}, {"year": 2012, "loss": 478},
+      {"year": 2013, "loss": 463}, {"year": 2014, "loss": 409},
+      {"year": 2015, "loss": 498}, {"year": 2016, "loss": 620},
+      {"year": 2017, "loss": 589}, {"year": 2018, "loss": 421},
+      {"year": 2019, "loss": 387}, {"year": 2020, "loss": 356},
+      {"year": 2021, "loss": 344}, {"year": 2022, "loss": 329},
+      {"year": 2023, "loss": 318}
+    ]
+  },
+  "width": "container",
+  "height": 260,
+  "layer": [
+    {
+      "mark": {"type": "area", "color": "#74c69d", "opacity": 0.2},
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": 0}},
+        "y": {"field": "loss", "type": "quantitative", "axis": {"title": "Tree Cover Lost (000 ha)"}}
+      }
+    },
+    {
+      "mark": {"type": "line", "color": "#2d6a4f", "strokeWidth": 2.5, "point": {"color": "#2d6a4f", "size": 40}},
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "loss", "type": "quantitative"},
+        "tooltip": [
+          {"field": "year", "title": "Year"},
+          {"field": "loss", "title": "Loss (000 ha)"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "text", "color": "#c1121f", "dy": -14, "fontSize": 11, "fontWeight": "bold"},
+      "transform": [{"filter": "datum.year === 2016"}],
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "loss", "type": "quantitative"},
+        "text": {"value": "Peak: 2016"}
+      }
+    }
+  ]
+}
