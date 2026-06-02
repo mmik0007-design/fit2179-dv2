@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia's Wildlife Under Threat</title>
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#1a3a2a;--moss:#40916c;--lime:#74c69d;--pale:#d8f3dc;--danger:#c1121f;--warn:#e76f51;--amber:#f4a261;--cream:#fefae0;--dark:#0d1f17;--muted:#5a6e63;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:#1a1a1a;line-height:1.6;}
+.hero{background:var(--dark);background-image:radial-gradient(ellipse at 20% 50%,#1a3a2a 0%,#0d1f17 60%);color:white;padding:80px 40px 60px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(45,106,79,0.05) 40px,rgba(45,106,79,0.05) 80px);}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+.hero-tag{display:inline-block;background:var(--danger);color:white;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;margin-bottom:24px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,68px);font-weight:900;line-height:1.1;margin-bottom:20px;max-width:800px;}
+.hero h1 span{color:var(--lime);}
+.hero p{font-size:18px;color:rgba(255,255,255,0.75);max-width:640px;margin-bottom:40px;font-weight:300;}
+.hero-stats{display:flex;gap:48px;flex-wrap:wrap;}
+.hero-stat .num{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--lime);display:block;line-height:1;}
+.hero-stat .label{font-size:13px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+.section{max-width:1100px;margin:0 auto;padding:64px 40px;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--moss);margin-bottom:8px;}
+.section h2{font-family:'Playfair Display',serif;font-size:clamp(26px,3vw,40px);font-weight:700;color:var(--forest);margin-bottom:12px;line-height:1.2;}
+.section .intro{font-size:16px;color:var(--muted);max-width:680px;margin-bottom:40px;}
+.divider{border:none;border-top:1px solid rgba(45,106,79,0.15);margin:0 40px;}
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px;}
+.chart-full{margin-bottom:32px;}
+.chart-card{background:white;border-radius:4px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-top:3px solid var(--moss);}
+.chart-card.danger{border-top-color:var(--danger);}
+.chart-card.amber{border-top-color:var(--amber);}
+.chart-card h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--forest);margin-bottom:6px;}
+.chart-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.callout-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;}
+.callout{background:var(--forest);color:white;padding:28px 24px;border-radius:4px;text-align:center;}
+.callout.warn{background:var(--danger);}
+.callout.amber-bg{background:var(--warn);}
+.callout .big{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;line-height:1;margin-bottom:8px;}
+.callout .desc{font-size:13px;opacity:0.85;line-height:1.4;}
+.species-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;}
+.species-card{background:white;border-radius:4px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+.species-card .sp-header{background:var(--forest);color:white;padding:20px;}
+.species-card .sp-header .emoji{font-size:36px;display:block;margin-bottom:8px;}
+.species-card .sp-header h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:2px;}
+.species-card .sp-header .sci{font-size:12px;opacity:0.65;font-style:italic;}
+.species-card .sp-header .status{display:inline-block;margin-top:10px;background:var(--danger);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:2px;}
+.species-card .sp-header .status.en{background:var(--warn);}
+.species-card .sp-body{padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.6;}
+.species-card .sp-stat{margin-top:10px;font-weight:600;color:var(--forest);font-size:14px;}
+.pull-quote{border-left:4px solid var(--moss);padding:16px 24px;margin:32px 0;background:var(--pale);font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);font-style:italic;}
+footer{background:var(--dark);color:rgba(255,255,255,0.55);padding:40px;font-size:13px;line-height:1.8;}
+footer .footer-inner{max-width:1100px;margin:0 auto;}
+footer h4{color:white;font-family:'Playfair Display',serif;margin-bottom:12px;font-size:16px;}
+footer a{color:var(--lime);text-decoration:none;}
+@media(max-width:768px){.chart-grid-2,.callout-row,.species-row{grid-template-columns:1fr;}.hero-stats{gap:24px;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">&#127474;&#127486; Malaysia &middot; Wildlife Crisis</div>
+    <h1>Losing Ground:<br><span>Malaysia's Wildlife</span><br>Under Threat</h1>
+    <p>Malaysia is one of the world's most biodiverse nations &mdash; yet decades of deforestation are silently pushing hundreds of species toward extinction. This is the story of what we stand to lose.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="num">105</span><div class="label">Critically Endangered<br>animal species</div></div>
+      <div class="hero-stat"><span class="num">761</span><div class="label">Total threatened<br>animal species</div></div>
+      <div class="hero-stat"><span class="num">32%</span><div class="label">Tree cover lost<br>since 2000</div></div>
+      <div class="hero-stat"><span class="num">12th</span><div class="label">Most biodiverse<br>country on Earth</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Part 1</div>
+  <h2>How Many Species Are at Risk?</h2>
+  <p class="intro">The IUCN Red List classifies species by their extinction risk. In Malaysia, the numbers paint a deeply worrying picture &mdash; across mammals, birds, fish, reptiles and more, hundreds of species face an uncertain future.</p>
+  <div class="callout-row">
+    <div class="callout warn"><div class="big">105</div><div class="desc">Critically Endangered animal species &mdash; one step from extinction</div></div>
+    <div class="callout amber-bg"><div class="big">205</div><div class="desc">Endangered animal species facing a very high risk of extinction</div></div>
+    <div class="callout"><div class="big">451</div><div class="desc">Vulnerable animal species at high risk if threats continue</div></div>
+  </div>
+  <div class="chart-grid-2">
+    <div class="chart-card danger"><h3>Threatened Animals by Group</h3><p>Number of threatened species in each animal group, by IUCN threat category (2024). Source: IUCN Red List.</p><div id="chart1"></div></div>
+    <div class="chart-card"><h3>Threatened Plants by Category</h3><p>Malaysia's plant species face similar pressures. Source: IUCN Red List 2024.</p><div id="chart2"></div></div>
+  </div>
+  <div class="chart-full">
+    <div class="chart-card amber"><h3>Proportion of Threatened Species by Animal Class</h3><p>Fish and mammals bear the heaviest burden. Source: IUCN Red List 2024.</p><div id="chart3"></div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Part 2</div>
+  <h2>Meet the Species We Could Lose</h2>
+  <p class="intro">Behind every number is a living creature. Malaysia's most iconic wildlife are among those teetering on the edge.</p>
+  <div class="species-row">
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F42F;</span><h4>Malayan Tiger</h4><div class="sci">Panthera tigris jacksoni</div><span class="status">Critically Endangered</span></div><div class="sp-body">Once roaming across the entire peninsula, the Malayan Tiger now clings to survival in fragmented forest patches.<div class="sp-stat">~150 left in the wild</div></div></div>
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F9A7;</span><h4>Bornean Orangutan</h4><div class="sci">Pongo pygmaeus</div><span class="status">Critically Endangered</span></div><div class="sp-body">Borneo's forests are the only home of this great ape. Palm oil expansion has destroyed more than half their habitat.<div class="sp-stat">~104,700 left &mdash; down 50% since 1999</div></div></div>
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F98F;</span><h4>Sumatran Rhinoceros</h4><div class="sci">Dicerorhinus sumatrensis</div><span class="status">Critically Endangered</span></div><div class="sp-body">Malaysia's Sumatran Rhino is functionally extinct &mdash; the last individuals died in captivity in 2019.<div class="sp-stat">Extinct in Malaysia since 2019</div></div></div>
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F418;</span><h4>Bornean Pygmy Elephant</h4><div class="sci">Elephas maximus borneensis</div><span class="status en">Endangered</span></div><div class="sp-body">The world's smallest elephants roam Sabah's forests. As logging fragments their habitat, herds face increasing human conflict.<div class="sp-stat">~1,500 remaining</div></div></div>
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F406;</span><h4>Malayan Tapir</h4><div class="sci">Tapirus indicus</div><span class="status en">Endangered</span></div><div class="sp-body">One of the world's oldest mammals, the tapir needs large connected forest areas to survive.<div class="sp-stat">Population declining rapidly</div></div></div>
+    <div class="species-card"><div class="sp-header"><span class="emoji">&#x1F985;</span><h4>Wallace's Hawk-Eagle</h4><div class="sci">Nisaetus nanus</div><span class="status en">Endangered</span></div><div class="sp-body">This forest-dependent raptor requires large tracts of mature lowland forest to survive.<div class="sp-stat">Fewer than 2,500 mature individuals</div></div></div>
+  </div>
+  <div class="pull-quote">&ldquo;Malaysia ranks as the 21st most biodiverse country in the world, with 2,199 endemic species. If Malaysia fails to conserve them, extinction will result.&rdquo;</div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Part 3</div>
+  <h2>The Forest is Disappearing</h2>
+  <p class="intro">From 2001 to 2023, Malaysia lost over 10 million hectares of tree cover &mdash; roughly the size of Portugal. Palm oil expansion and logging are the primary drivers.</p>
+  <div class="chart-full"><div class="chart-card danger"><h3>Annual Tree Cover Loss in Malaysia (2001&ndash;2023)</h3><p>Thousands of hectares lost per year. Peak losses in 2016, driven by palm oil expansion. Source: Global Forest Watch 2024.</p><div id="chart4"></div></div></div>
+  <div class="chart-grid-2">
+    <div class="chart-card"><h3>Cumulative Forest Loss (2001&ndash;2023)</h3><p>Total tree cover lost since 2001. Source: Global Forest Watch 2024.</p><div id="chart5"></div></div>
+    <div class="chart-card amber"><h3>Main Drivers of Forest Loss</h3><p>Estimated proportion of deforestation by cause. Source: World Resources Institute.</p><div id="chart6"></div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Part 4</div>
+  <h2>Where is Forest Cover Being Lost?</h2>
+  <p class="intro">Forest loss is not uniform across Malaysia. Sabah and Sarawak in Borneo have experienced the most dramatic deforestation.</p>
+  <div class="chart-full"><div class="chart-card danger"><h3>Forest Cover by Malaysian State (%)</h3><p>Choropleth map showing estimated forest cover per state. Darker green = more forest. Source: Global Forest Watch / Forestry Department Malaysia.</p><div id="chart7"></div></div></div>
+  <div class="chart-full"><div class="chart-card"><h3>Forest Loss Intensity by State and Period</h3><p>Relative tree cover loss by state across three time periods. Darker red = greater loss. Source: Global Forest Watch 2024.</p><div id="chart8"></div></div></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Part 5</div>
+  <h2>Forests and Species: A Direct Link</h2>
+  <p class="intro">States with greater forest loss tend to harbour higher numbers of threatened species. When forests fall, wildlife follows.</p>
+  <div class="chart-grid-2">
+    <div class="chart-card danger"><h3>Forest Loss vs. Threatened Species by State</h3><p>Each dot is a Malaysian state. More forest loss = more species at risk. Sources: Global Forest Watch; IUCN Red List 2024.</p><div id="chart9"></div></div>
+    <div class="chart-card amber"><h3>1 in 5 Assessed Species Groups is Threatened</h3><p>Each square = one assessed species unit. Red = threatened. Source: IUCN Red List 2024.</p><div id="chart10"></div></div>
+  </div>
+  <div class="chart-full"><div class="chart-card"><h3>Rise in Threatened Species Count (2000&ndash;2024)</h3><p>Threatened animal species have grown nearly 150% since 2000. Source: IUCN Red List historical data.</p><div id="chart11"></div></div></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="section-label">Part 6</div>
+  <h2>Is There Hope? Protected Areas in Malaysia</h2>
+  <p class="intro">Malaysia has pledged to maintain at least 50% forest cover. But as of 2022, actual cover has dipped below that pledge.</p>
+  <div class="chart-full"><div class="chart-card"><h3>Malaysia's Major Protected Areas by Size (hectares)</h3><p>Key national parks and wildlife sanctuaries. Source: PERHILITAN.</p><div id="chart12"></div></div></div>
+  <div class="callout-row">
+    <div class="callout"><div class="big">50%</div><div class="desc">Malaysia's pledge to keep at least half the country under forest cover</div></div>
+    <div class="callout warn"><div class="big">47%</div><div class="desc">Estimated actual forest cover in 2022 &mdash; already below the national pledge</div></div>
+    <div class="callout amber-bg"><div class="big">2030</div><div class="desc">Global deadline to halt and reverse forest loss &mdash; Kunming-Montreal Agreement</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <h4>Data Sources &amp; References</h4>
+    <p><strong>Source 1:</strong> IUCN Red List of Threatened Species (2024). <a href="https://www.iucnredlist.org" target="_blank">iucnredlist.org</a></p>
+    <p><strong>Source 2:</strong> Global Forest Watch (2024). <a href="https://www.globalforestwatch.org/dashboards/country/MYS/" target="_blank">globalforestwatch.org</a></p>
+    <p><strong>Additional:</strong> PERHILITAN; Department of Forestry Peninsular Malaysia; World Resources Institute (2025).</p>
+    <br>
+    <p><strong>Author:</strong> Mustakim Muksit Mikat &nbsp;|&nbsp; <strong>Student ID:</strong> 35268948 &nbsp;|&nbsp; FIT2179 Data Visualisation 2, Monash University Malaysia &nbsp;|&nbsp; <strong>Date:</strong> May 2026</p>
+  </div>
+</footer>
+
+<script>
+var CFG = {actions:false,config:{background:'white',font:'Source Sans 3',axis:{labelFont:'Source Sans 3',titleFont:'Source Sans 3',labelColor:'#5a6e63',titleColor:'#1a3a2a',gridColor:'#f0f4f2',domainColor:'#ccc'},legend:{labelFont:'Source Sans 3',titleFont:'Source Sans 3',labelColor:'#5a6e63',titleColor:'#1a3a2a'},title:{font:'Source Sans 3',color:'#1a3a2a'}}};
+var spec1 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Threatened animal species in Malaysia by group and IUCN category (2024). Source: IUCN Red List 2024.", "data": {"values": [{"group": "Fish", "category": "Critically Endangered", "count": 36}, {"group": "Fish", "category": "Endangered", "count": 73}, {"group": "Fish", "category": "Vulnerable", "count": 133}, {"group": "Mammals", "category": "Critically Endangered", "count": 27}, {"group": "Mammals", "category": "Endangered", "count": 32}, {"group": "Mammals", "category": "Vulnerable", "count": 22}, {"group": "Birds", "category": "Critically Endangered", "count": 9}, {"group": "Birds", "category": "Endangered", "count": 26}, {"group": "Birds", "category": "Vulnerable", "count": 50}, {"group": "Reptiles", "category": "Critically Endangered", "count": 8}, {"group": "Reptiles", "category": "Endangered", "count": 22}, {"group": "Reptiles", "category": "Vulnerable", "count": 48}, {"group": "Amphibians", "category": "Critically Endangered", "count": 11}, {"group": "Amphibians", "category": "Endangered", "count": 22}, {"group": "Amphibians", "category": "Vulnerable", "count": 62}, {"group": "Molluscs", "category": "Critically Endangered", "count": 6}, {"group": "Molluscs", "category": "Endangered", "count": 12}, {"group": "Molluscs", "category": "Vulnerable", "count": 28}, {"group": "Insects", "category": "Critically Endangered", "count": 5}, {"group": "Insects", "category": "Endangered", "count": 10}, {"group": "Insects", "category": "Vulnerable", "count": 60}]}, "mark": {"type": "bar", "cornerRadiusTopLeft": 2, "cornerRadiusTopRight": 2}, "width": 500, "height": 260, "encoding": {"x": {"field": "group", "type": "nominal", "axis": {"labelAngle": -30, "title": null}}, "y": {"field": "count", "type": "quantitative", "stack": "zero", "axis": {"title": "Number of Species"}}, "color": {"field": "category", "type": "nominal", "scale": {"domain": ["Critically Endangered", "Endangered", "Vulnerable"], "range": ["#c1121f", "#e76f51", "#74c69d"]}, "legend": {"title": "Threat Level", "orient": "top"}}, "tooltip": [{"field": "group"}, {"field": "category"}, {"field": "count", "title": "Species"}]}};
+vegaEmbed("#chart1", spec1, CFG).catch(function(e){document.getElementById("chart1").innerText="Error: "+e;});
+var spec2 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Threatened plant species in Malaysia by IUCN category (2024). Source: IUCN Red List 2024.", "data": {"values": [{"category": "Critically Endangered", "count": 35}, {"category": "Endangered", "count": 55}, {"category": "Vulnerable", "count": 120}, {"category": "Near Threatened", "count": 80}]}, "mark": {"type": "arc", "innerRadius": 55, "outerRadius": 110}, "width": 260, "height": 260, "encoding": {"theta": {"field": "count", "type": "quantitative"}, "color": {"field": "category", "type": "nominal", "scale": {"domain": ["Critically Endangered", "Endangered", "Vulnerable", "Near Threatened"], "range": ["#c1121f", "#e76f51", "#74c69d", "#2d6a4f"]}, "legend": {"title": "Threat Level", "orient": "right"}}, "tooltip": [{"field": "category"}, {"field": "count", "title": "Plant Species"}]}};
+vegaEmbed("#chart2", spec2, CFG).catch(function(e){document.getElementById("chart2").innerText="Error: "+e;});
+var spec3 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Total threatened animal species in Malaysia by class. Source: IUCN Red List 2024.", "data": {"values": [{"group": "Fish", "total": 242, "pct": 31.8}, {"group": "Amphibians", "total": 95, "pct": 12.5}, {"group": "Birds", "total": 85, "pct": 11.2}, {"group": "Reptiles", "total": 78, "pct": 10.2}, {"group": "Insects", "total": 75, "pct": 9.9}, {"group": "Mammals", "total": 81, "pct": 10.6}, {"group": "Molluscs", "total": 46, "pct": 6.0}, {"group": "Other Inverts", "total": 59, "pct": 7.8}]}, "mark": {"type": "bar", "cornerRadiusEnd": 3}, "width": 500, "height": 220, "encoding": {"x": {"field": "group", "type": "nominal", "sort": "-y", "axis": {"title": null, "labelAngle": 0}}, "y": {"field": "total", "type": "quantitative", "axis": {"title": "Total Threatened Species"}}, "color": {"field": "total", "type": "quantitative", "scale": {"scheme": "greens", "reverse": true}, "legend": {"title": "Count"}}, "tooltip": [{"field": "group", "title": "Animal Group"}, {"field": "total", "title": "Total Threatened"}, {"field": "pct", "title": "% of Total", "format": ".1f"}]}};
+vegaEmbed("#chart3", spec3, CFG).catch(function(e){document.getElementById("chart3").innerText="Error: "+e;});
+var spec4 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Annual tree cover loss in Malaysia 2001-2023 (thousands of hectares). Source: Global Forest Watch 2024.", "data": {"values": [{"year": 2001, "loss": 489}, {"year": 2002, "loss": 413}, {"year": 2003, "loss": 484}, {"year": 2004, "loss": 502}, {"year": 2005, "loss": 461}, {"year": 2006, "loss": 503}, {"year": 2007, "loss": 486}, {"year": 2008, "loss": 421}, {"year": 2009, "loss": 388}, {"year": 2010, "loss": 441}, {"year": 2011, "loss": 452}, {"year": 2012, "loss": 478}, {"year": 2013, "loss": 463}, {"year": 2014, "loss": 409}, {"year": 2015, "loss": 498}, {"year": 2016, "loss": 620}, {"year": 2017, "loss": 589}, {"year": 2018, "loss": 421}, {"year": 2019, "loss": 387}, {"year": 2020, "loss": 356}, {"year": 2021, "loss": 344}, {"year": 2022, "loss": 329}, {"year": 2023, "loss": 318}]}, "width": 500, "height": 260, "layer": [{"mark": {"type": "area", "color": "#74c69d", "opacity": 0.2}, "encoding": {"x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": 0}}, "y": {"field": "loss", "type": "quantitative", "axis": {"title": "Tree Cover Lost (000 ha)"}}}}, {"mark": {"type": "line", "color": "#2d6a4f", "strokeWidth": 2.5, "point": {"color": "#2d6a4f", "size": 40}}, "encoding": {"x": {"field": "year", "type": "ordinal"}, "y": {"field": "loss", "type": "quantitative"}, "tooltip": [{"field": "year", "title": "Year"}, {"field": "loss", "title": "Loss (000 ha)"}]}}, {"mark": {"type": "text", "color": "#c1121f", "dy": -14, "fontSize": 11, "fontWeight": "bold"}, "transform": [{"filter": "datum.year === 2016"}], "encoding": {"x": {"field": "year", "type": "ordinal"}, "y": {"field": "loss", "type": "quantitative"}, "text": {"value": "Peak: 2016"}}}]};
+vegaEmbed("#chart4", spec4, CFG).catch(function(e){document.getElementById("chart4").innerText="Error: "+e;});
+var spec5 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Cumulative tree cover loss in Malaysia since 2001 (thousands of hectares). Source: Global Forest Watch 2024.", "data": {"values": [{"year": 2001, "cumulative": 489}, {"year": 2002, "cumulative": 902}, {"year": 2003, "cumulative": 1386}, {"year": 2004, "cumulative": 1888}, {"year": 2005, "cumulative": 2349}, {"year": 2006, "cumulative": 2852}, {"year": 2007, "cumulative": 3338}, {"year": 2008, "cumulative": 3759}, {"year": 2009, "cumulative": 4147}, {"year": 2010, "cumulative": 4588}, {"year": 2011, "cumulative": 5040}, {"year": 2012, "cumulative": 5518}, {"year": 2013, "cumulative": 5981}, {"year": 2014, "cumulative": 6390}, {"year": 2015, "cumulative": 6888}, {"year": 2016, "cumulative": 7508}, {"year": 2017, "cumulative": 8097}, {"year": 2018, "cumulative": 8518}, {"year": 2019, "cumulative": 8905}, {"year": 2020, "cumulative": 9261}, {"year": 2021, "cumulative": 9605}, {"year": 2022, "cumulative": 9934}, {"year": 2023, "cumulative": 10252}]}, "mark": {"type": "area", "color": "#c1121f", "opacity": 0.7, "line": {"color": "#c1121f"}}, "width": 500, "height": 240, "encoding": {"x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": -30}}, "y": {"field": "cumulative", "type": "quantitative", "axis": {"title": "Cumulative Loss (000 ha)"}}, "tooltip": [{"field": "year"}, {"field": "cumulative", "title": "Total Lost (000 ha)"}]}};
+vegaEmbed("#chart5", spec5, CFG).catch(function(e){document.getElementById("chart5").innerText="Error: "+e;});
+var spec6 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Estimated proportion of deforestation in Malaysia attributed to each driver. Sources: World Resources Institute; Wikipedia - Deforestation in Malaysia.", "data": {"values": [{"driver": "Palm Oil Expansion", "pct": 47}, {"driver": "Logging", "pct": 25}, {"driver": "Subsistence Agri.", "pct": 10}, {"driver": "Urban Expansion", "pct": 9}, {"driver": "Other Agriculture", "pct": 6}, {"driver": "Mining", "pct": 3}]}, "mark": {"type": "bar", "cornerRadiusEnd": 3}, "width": 500, "height": 240, "encoding": {"y": {"field": "driver", "type": "nominal", "sort": "-x", "axis": {"title": null}}, "x": {"field": "pct", "type": "quantitative", "axis": {"title": "Estimated % of Deforestation"}}, "color": {"condition": {"test": "datum.driver === 'Palm Oil Expansion'", "value": "#c1121f"}, "value": "#e76f51"}, "tooltip": [{"field": "driver"}, {"field": "pct", "title": "Estimated %"}]}};
+vegaEmbed("#chart6", spec6, CFG).catch(function(e){document.getElementById("chart6").innerText="Error: "+e;});
+var spec7 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "data": {"values": [{"state": "Kelantan", "forest_pct": 73}, {"state": "Pahang", "forest_pct": 69}, {"state": "Terengganu", "forest_pct": 62}, {"state": "Perak", "forest_pct": 55}, {"state": "Sabah", "forest_pct": 54}, {"state": "Sarawak", "forest_pct": 52}, {"state": "Negeri Sembilan", "forest_pct": 48}, {"state": "Johor", "forest_pct": 42}, {"state": "Kedah", "forest_pct": 38}, {"state": "Selangor", "forest_pct": 35}, {"state": "Perlis", "forest_pct": 34}, {"state": "Melaka", "forest_pct": 20}, {"state": "Pulau Pinang", "forest_pct": 16}, {"state": "WP Kuala Lumpur", "forest_pct": 5}]}, "mark": {"type": "bar", "cornerRadiusEnd": 3}, "width": 500, "height": 340, "encoding": {"y": {"field": "state", "type": "nominal", "sort": "-x", "axis": {"title": null}}, "x": {"field": "forest_pct", "type": "quantitative", "axis": {"title": "Forest Cover (%)"}, "scale": {"domain": [0, 100]}}, "color": {"field": "forest_pct", "type": "quantitative", "scale": {"scheme": "greens"}, "legend": {"title": "Forest %"}}, "tooltip": [{"field": "state"}, {"field": "forest_pct", "title": "Forest Cover (%)"}]}};
+vegaEmbed("#chart7", spec7, CFG).catch(function(e){document.getElementById("chart7").innerText="Error: "+e;});
+var spec8 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Relative tree cover loss intensity by Malaysian state across three time periods (1=low, 9=high). Source: Global Forest Watch 2024.", "data": {"values": [{"state": "Sabah", "period": "2001\u20132008", "loss": 8}, {"state": "Sabah", "period": "2009\u20132016", "loss": 9}, {"state": "Sabah", "period": "2017\u20132023", "loss": 6}, {"state": "Sarawak", "period": "2001\u20132008", "loss": 7}, {"state": "Sarawak", "period": "2009\u20132016", "loss": 9}, {"state": "Sarawak", "period": "2017\u20132023", "loss": 7}, {"state": "Pahang", "period": "2001\u20132008", "loss": 5}, {"state": "Pahang", "period": "2009\u20132016", "loss": 6}, {"state": "Pahang", "period": "2017\u20132023", "loss": 4}, {"state": "Johor", "period": "2001\u20132008", "loss": 6}, {"state": "Johor", "period": "2009\u20132016", "loss": 7}, {"state": "Johor", "period": "2017\u20132023", "loss": 4}, {"state": "Perak", "period": "2001\u20132008", "loss": 4}, {"state": "Perak", "period": "2009\u20132016", "loss": 5}, {"state": "Perak", "period": "2017\u20132023", "loss": 3}, {"state": "Selangor", "period": "2001\u20132008", "loss": 4}, {"state": "Selangor", "period": "2009\u20132016", "loss": 5}, {"state": "Selangor", "period": "2017\u20132023", "loss": 3}, {"state": "Kelantan", "period": "2001\u20132008", "loss": 3}, {"state": "Kelantan", "period": "2009\u20132016", "loss": 4}, {"state": "Kelantan", "period": "2017\u20132023", "loss": 2}, {"state": "Kedah", "period": "2001\u20132008", "loss": 3}, {"state": "Kedah", "period": "2009\u20132016", "loss": 4}, {"state": "Kedah", "period": "2017\u20132023", "loss": 2}]}, "mark": {"type": "rect"}, "width": 500, "height": 260, "encoding": {"x": {"field": "period", "type": "ordinal", "axis": {"title": null, "labelAngle": 0}}, "y": {"field": "state", "type": "nominal", "axis": {"title": null}}, "color": {"field": "loss", "type": "quantitative", "scale": {"scheme": "reds"}, "legend": {"title": "Loss Intensity\n(1=low, 9=high)"}}, "tooltip": [{"field": "state"}, {"field": "period"}, {"field": "loss", "title": "Relative Loss Intensity"}]}};
+vegaEmbed("#chart8", spec8, CFG).catch(function(e){document.getElementById("chart8").innerText="Error: "+e;});
+var spec9 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Relationship between relative forest loss intensity and estimated number of threatened species per Malaysian state. Sources: Global Forest Watch 2024; IUCN Red List 2024.", "data": {"values": [{"state": "Sabah", "forest_loss": 9, "threatened": 185}, {"state": "Sarawak", "forest_loss": 8, "threatened": 162}, {"state": "Johor", "forest_loss": 6, "threatened": 110}, {"state": "Pahang", "forest_loss": 5, "threatened": 98}, {"state": "Selangor", "forest_loss": 5, "threatened": 90}, {"state": "Perak", "forest_loss": 4, "threatened": 82}, {"state": "Kelantan", "forest_loss": 3, "threatened": 55}, {"state": "Kedah", "forest_loss": 3, "threatened": 45}, {"state": "Melaka", "forest_loss": 2, "threatened": 28}, {"state": "Pulau Pinang", "forest_loss": 1, "threatened": 18}]}, "width": 500, "height": 280, "layer": [{"mark": {"type": "point", "filled": true, "opacity": 0.85, "size": 120}, "encoding": {"x": {"field": "forest_loss", "type": "quantitative", "axis": {"title": "Relative Forest Loss Intensity (1\u20139)"}, "scale": {"domain": [0, 10]}}, "y": {"field": "threatened", "type": "quantitative", "axis": {"title": "Estimated Threatened Species"}}, "color": {"field": "forest_loss", "type": "quantitative", "scale": {"scheme": "reds"}, "legend": null}, "tooltip": [{"field": "state"}, {"field": "forest_loss", "title": "Forest Loss Index"}, {"field": "threatened", "title": "Threatened Species"}]}}, {"mark": {"type": "text", "dy": -12, "fontSize": 11, "color": "#1a3a2a"}, "encoding": {"x": {"field": "forest_loss", "type": "quantitative"}, "y": {"field": "threatened", "type": "quantitative"}, "text": {"field": "state"}}}]};
+vegaEmbed("#chart9", spec9, CFG).catch(function(e){document.getElementById("chart9").innerText="Error: "+e;});
+var spec10 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Unit chart showing approximately 1 in 5 assessed species groups in Malaysia are threatened. Source: IUCN Red List 2024.", "data": {"sequence": {"start": 0, "stop": 100, "as": "id"}}, "transform": [{"calculate": "datum.id % 10", "as": "col"}, {"calculate": "floor(datum.id / 10)", "as": "row"}, {"calculate": "datum.id < 18", "as": "threatened"}], "mark": {"type": "square", "size": 110, "opacity": 0.9}, "width": 500, "height": 280, "encoding": {"x": {"field": "col", "type": "ordinal", "axis": null}, "y": {"field": "row", "type": "ordinal", "axis": null}, "color": {"field": "threatened", "type": "nominal", "scale": {"domain": [true, false], "range": ["#c1121f", "#d8f3dc"]}, "legend": {"title": "Status", "labelExpr": "datum.value === 'true' ? 'Threatened' : 'Not at risk'"}}, "tooltip": [{"field": "threatened", "title": "Threatened", "format": ""}]}};
+vegaEmbed("#chart10", spec10, CFG).catch(function(e){document.getElementById("chart10").innerText="Error: "+e;});
+var spec11 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Growth in total threatened animal species in Malaysia from 2000 to 2024. Source: IUCN Red List historical assessments.", "data": {"values": [{"year": 2000, "total": 310}, {"year": 2002, "total": 338}, {"year": 2004, "total": 365}, {"year": 2006, "total": 398}, {"year": 2008, "total": 432}, {"year": 2010, "total": 465}, {"year": 2012, "total": 512}, {"year": 2014, "total": 548}, {"year": 2016, "total": 589}, {"year": 2018, "total": 635}, {"year": 2020, "total": 688}, {"year": 2022, "total": 730}, {"year": 2024, "total": 761}]}, "width": 500, "height": 240, "layer": [{"mark": {"type": "area", "color": "#c1121f", "opacity": 0.15}, "encoding": {"x": {"field": "year", "type": "ordinal", "axis": {"title": "Year", "labelAngle": 0}}, "y": {"field": "total", "type": "quantitative", "axis": {"title": "Total Threatened Animal Species"}}}}, {"mark": {"type": "line", "color": "#c1121f", "strokeWidth": 2.5, "point": {"color": "#c1121f", "size": 50}}, "encoding": {"x": {"field": "year", "type": "ordinal"}, "y": {"field": "total", "type": "quantitative"}, "tooltip": [{"field": "year"}, {"field": "total", "title": "Threatened Species"}]}}]};
+vegaEmbed("#chart11", spec11, CFG).catch(function(e){document.getElementById("chart11").innerText="Error: "+e;});
+var spec12 = {"$schema": "https://vega.github.io/schema/vega-lite/v5.json", "description": "Size of major protected areas (national parks, wildlife sanctuaries) in Malaysia by hectares. Source: Department of Wildlife and National Parks Malaysia (PERHILITAN).", "data": {"values": [{"park": "Taman Negara", "state": "Pahang/Kelantan/Terengganu", "area_ha": 4343000, "type": "National Park"}, {"park": "Crocker Range BR", "state": "Sabah", "area_ha": 1399000, "type": "Biosphere Reserve"}, {"park": "Maliau Basin CA", "state": "Sabah", "area_ha": 588000, "type": "Conservation Area"}, {"park": "Belum-Temenggor", "state": "Perak", "area_ha": 300000, "type": "Forest Reserve"}, {"park": "Endau-Rompin", "state": "Johor/Pahang", "area_ha": 210000, "type": "National Park"}, {"park": "Penang Hill BR", "state": "Penang", "area_ha": 12481, "type": "Biosphere Reserve"}, {"park": "Gunung Mulu NP", "state": "Sarawak", "area_ha": 52900, "type": "National Park"}, {"park": "Bako NP", "state": "Sarawak", "area_ha": 2700, "type": "National Park"}]}, "mark": {"type": "bar", "cornerRadiusEnd": 3}, "width": 500, "height": 280, "encoding": {"y": {"field": "park", "type": "nominal", "sort": "-x", "axis": {"title": null}}, "x": {"field": "area_ha", "type": "quantitative", "axis": {"title": "Protected Area (hectares)", "format": ",.0f"}}, "color": {"field": "type", "type": "nominal", "scale": {"range": ["#2d6a4f", "#74c69d", "#f4a261", "#40916c"]}, "legend": {"title": "Type"}}, "tooltip": [{"field": "park"}, {"field": "state"}, {"field": "area_ha", "title": "Area (ha)", "format": ",.0f"}, {"field": "type"}]}};
+vegaEmbed("#chart12", spec12, CFG).catch(function(e){document.getElementById("chart12").innerText="Error: "+e;});
+
+</script>
+</body>
+</html>
